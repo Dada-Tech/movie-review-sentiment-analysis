@@ -1,16 +1,13 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template
 
 import text_classifier
 
 
-def load_model():
-    model = text_classifier.load_model("movie_sentiment_model_parameters.json")
-    logprior = model['logprior']
-    loglikelihood = model['loglikelihood']
-    return logprior, loglikelihood
-
-
 def create_app():
+    """
+    App Creation factor
+    :return: flask app ready to be deployed
+    """
     app = Flask(__name__)
 
     logprior, loglikelihood = load_model()
@@ -34,6 +31,17 @@ def create_app():
         return render_template('index.html', prediction=prediction)
 
     return app
+
+
+def load_model():
+    """
+    Load model and return the values needed nicely
+    :return: logprior and loglikelihood
+    """
+    model = text_classifier.load_model("movie_sentiment_model_parameters.json")
+    logprior = model['logprior']
+    loglikelihood = model['loglikelihood']
+    return logprior, loglikelihood
 
 
 if __name__ == '__main__':
