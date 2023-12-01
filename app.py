@@ -2,7 +2,6 @@ from flask import Flask, request, render_template
 
 import text_classifier
 
-
 def create_app():
     """
     App Creation factor
@@ -42,8 +41,3 @@ def load_model():
     logprior = model['logprior']
     loglikelihood = model['loglikelihood']
     return logprior, loglikelihood
-
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
