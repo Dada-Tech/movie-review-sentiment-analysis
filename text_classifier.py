@@ -1,3 +1,6 @@
+import json
+from typing import Optional
+
 import numpy as np
 import math
 import pandas as pd
@@ -21,7 +24,9 @@ def loadData(fileName):
     # Reading the data and removing columns that are not important.
     print(f'loading dataset "{fileName}"...')
     return pd.read_csv(fileName, sep=',', encoding='latin-1',
-                       usecols=lambda col: col not in ["Unnamed: 2", "Unnamed: 3", "Unnamed: 4"])
+                       usecols=lambda col: col not in ["Unnamed: 2",
+                                                       "Unnamed: 3",
+                                                       "Unnamed: 4"])
 
 
 def clean_review(review):
@@ -47,7 +52,8 @@ def clean_review(review):
     cleaned_review = word_tokenize(cleaned_review)
 
     # stopwords
-    cleaned_review = [word for word in cleaned_review if word not in stopwords.words('english')]
+    cleaned_review = [word for word in cleaned_review if
+                      word not in stopwords.words('english')]
 
     # stemming
     cleaned_review = [stemmer.stem(token) for token in cleaned_review]
@@ -75,10 +81,25 @@ def find_occurrence(frequency, word, label):
     return n
 
 
+def load_model(model_file):
+    model_parameters = {}
+
+    # Save the model parameters to a file
+    with open(model_file, 'r') as file:
+        model_file = json.load(file)
+
+        model_parameters['logprior'] = model_file.get('logprior')
+        model_parameters['loglikelihood'] = model_file.get('loglikelihood')
+
+    return model_parameters
+
+
 def main():
     df = loadData('movie_reviews.csv')
 
-    X_train_a, X_test_a, y_train_a, y_test_a = train_test_split(df['review'], df['sentiment'], train_size=1000)
+    X_train_a, X_test_a, y_train_a, y_test_a = train_test_split(df['review'],
+                                                                df['sentiment'],
+                                                                train_size=1000)
 
     # map to numerical data
     output_map = {'positive': 0, 'negative': 1}
@@ -91,7 +112,8 @@ def main():
     print('done!\n\n\n')
 
     while True:
-        prompt_input = input("\n\nEnter a movie review or enter 'X' to exit...\n")
+        prompt_input = input(
+            "\n\nEnter a movie review or enter 'X' to exit...\n")
         if prompt_input.lower() == 'x':
             break
 
@@ -118,7 +140,8 @@ def review_counter(output_occurrence, reviews, positive_or_negative):
         split_review = clean_review(review).split()
         for word in split_review:
             key = (word, label)
-            output_occurrence[key] = output_occurrence[key] + 1 if key in output_occurrence else 1
+            output_occurrence[key] = output_occurrence[
+                                         key] + 1 if key in output_occurrence else 1
     return output_occurrence
 
 
@@ -163,7 +186,8 @@ def train_naive_bayes(freqs, train_x, train_y):
     neg_num_docs = (train_y == 0).sum() + 1
 
     # Calculate logprior
-    logp = {1: np.log(pos_num_docs / num_doc), 0: np.log(neg_num_docs / num_doc)}
+    logp = {1: np.log(pos_num_docs / num_doc),
+            0: np.log(neg_num_docs / num_doc)}
     # scalar log prior since binary class
     logprior = np.log(pos_num_docs / neg_num_docs)
 
@@ -184,7 +208,7 @@ def train_naive_bayes(freqs, train_x, train_y):
     return logprior, loglikelihood
 
 
-def naive_bayes_predict(review, logprior, loglikelihood):
+def naive_bayes_predict(review, logprior, loglikelihood, categoricalLabel: Optional[bool] = False):
     '''
     Params:
         review: a string
@@ -221,12 +245,20 @@ def naive_bayes_predict(review, logprior, loglikelihood):
             # save the log likelihood
             word_p[word] = loglikelihood[word]
 
-    print('each token and their log-likelihoods for each class [positive, negative]')
+    print(
+        'each token and their log-likelihoods for each class [positive, negative]')
     for key, value in word_p.items():
         print(f'tokenized word: "{key}", likelihood: "{value}"')
 
-    return 0 if prob_pos < prob_neg else 1
+    classification = 0 if prob_pos < prob_neg else 1
+
+    if categoricalLabel:
+        # map from numerical data
+        reverse_map = {0: 'positive', 1: 'negative'}
+        return reverse_map[classification]
+
+    return classification
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
