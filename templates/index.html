@@ -10,18 +10,15 @@
 </head>
 
 <body>
-{% with mood=mood %}
     {% include 'face.html' %}
-{% endwith %}
-<div>prediction:</div>
-<p id="prediction"></p>
-{% include 'form.html' %}
+    <h2 id="prediction">- No Prediction Yet - </h2>
+    {% include 'form.html' %}
 </body>
 </html>
 
 <script>
-    function cancelForm() {
-        // Add logic for cancel button if needed
+    function clearForm() {
+        document.getElementById('reviewInput').value = "";
     }
 
     function sendReview() {

@@ -46,7 +46,7 @@
 }
 
 .screen-header-button.close {
-  background: #ed1c6f;
+  background: #b68548;
 }
 
 .screen-header-button.maximize {
@@ -104,7 +104,7 @@
 
 .app-contact {
   margin-top: auto;
-  font-size: 8px;
+  font-size: 12px;
   color: #888;
 }
 
@@ -114,6 +114,10 @@
 
 .app-form-group.message {
   margin-top: 40px;
+}
+
+#reviewInput {
+  min-height: 50px;
 }
 
 .app-form-group.buttons {
