@@ -4,14 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/face.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 </head>
+
 <body>
-    <form method="post" action="/predict">
-        <label for="review">Enter your review:</label>
-        <input type="text" id="review" name="review" required>
-        <button type="submit">Submit</button>
-    </form>
-    <div>prediction:</div>
-    <p>{{ prediction }}</p>
+{% with mood=mood %}
+    {% include 'face.html' %}
+{% endwith %}
+<div>prediction:</div>
+<p id="prediction"></p>
+{% include 'form.html' %}
 </body>
 </html>
+
+<script>
+    function cancelForm() {
+        // Add logic for cancel button if needed
+    }
+
+    function sendReview() {
+        // Get the review input value
+        const review = document.getElementById('reviewInput').value;
+
+        console.log("going to send this from form!", review)
+
+        // Perform the asynchronous POST request
+        fetch('/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({review: review}),
+        })
+            .then(response => response.json())
+            .then(response => {
+                // update values dynamically
+                document.getElementById('prediction').innerHTML = response.prediction;
+                document.getElementById('face').className = response.mood;
+            })
+            .catch(error => {
+                console.error('Error sending review:', error);
+            });
+    }
+</script>

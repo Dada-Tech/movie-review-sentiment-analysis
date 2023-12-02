@@ -245,10 +245,10 @@ def naive_bayes_predict(review, logprior, loglikelihood, categoricalLabel: Optio
             # save the log likelihood
             word_p[word] = loglikelihood[word]
 
-    print(
-        'each token and their log-likelihoods for each class [positive, negative]')
-    for key, value in word_p.items():
-        print(f'tokenized word: "{key}", likelihood: "{value}"')
+    # print(
+    #     'each token and their log-likelihoods for each class [positive, negative]')
+    # for key, value in word_p.items():
+    #     print(f'tokenized word: "{key}", likelihood: "{value}"')
 
     classification = 0 if prob_pos < prob_neg else 1
 

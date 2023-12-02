@@ -1,6 +1,7 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 import text_classifier
+
 
 def create_app():
     """
@@ -22,12 +23,21 @@ def create_app():
     @app.route('/predict', methods=['POST'])
     def predict_review():
         # Get the review from the form data
-        review_text = request.form.get('review')
+        review_text = request.json.get('review')
 
-        prediction = text_classifier.naive_bayes_predict(
-            review_text, logprior, loglikelihood, categoricalLabel=True)
+        classification = text_classifier.naive_bayes_predict(
+            review_text, logprior, loglikelihood)
 
-        return render_template('index.html', prediction=prediction)
+        if classification == 0:
+            mood = "happy"
+            prediction = "Great !"
+        else:
+            mood = "angry"
+            prediction = "Sorry to hear that!"
+
+        # return render_template(
+        #     'index.html', prediction=prediction, mood=mood)
+        return jsonify({'prediction': prediction, 'mood': mood})
 
     return app
 
