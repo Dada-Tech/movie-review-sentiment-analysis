@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
 </head>
 
-<body>
+<body class="neutral-bg">
     {% include 'face.html' %}
-    <h2 id="prediction">- No Prediction Yet - </h2>
+    <h2 id="prediction">- No Review Yet - </h2>
     {% include 'form.html' %}
 </body>
 </html>
@@ -40,6 +40,7 @@
                 // update values dynamically
                 document.getElementById('prediction').innerHTML = response.prediction;
                 document.getElementById('face').className = response.mood;
+                document.getElementsByTagName('body')[0].className = response.mood + "-bg";
             })
             .catch(error => {
                 console.error('Error sending review:', error);
