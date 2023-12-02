@@ -30,16 +30,16 @@ A model working in a Jupyter notebook is only 10% of the battle when it comes to
 
 
 # Results
-With a balanced dataset of exactly 50% positive and 50% negative class (feeds into the Naive prior probability) with a custom model, we get weak results.
-Of course major improvements can be made by leveraging more powerful models.
+With a balanced dataset of exactly 50% positive and 50% negative class (feeds into the Naive prior probability) and 
+a custom NB model, we get weak results. Of course major improvements can be made by leveraging more powerful models 
+that don't have the inherent naivety of prior probabilities.
 
 ![image.png](confusion_matrix.png)
 
 
-
 # References:
-Emotion Face 
+Face Emoji with Emotion 
 https://codepen.io/benjyring/pen/YmPRZx
 
-Contact Form
+Contact Form UI
 https://codepen.io/krisantuswanandi/pen/KxrgeZ
