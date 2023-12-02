@@ -1,6 +1,6 @@
 # Movie Review Sentiment Analysis
 
-[Notebook](movie-review.ipynb)
+[Notebook](movie-review.ipynb)  
 [Flask App](app.py)
 
 ## Description
